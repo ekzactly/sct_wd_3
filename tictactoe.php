@@ -55,35 +55,50 @@ if (isset($_POST['reset'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic-Tac-Toe</title>
+    <title>Cute Tic-Tac-Toe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #9b59b6;
+            --secondary-color: #8e44ad;
+            --background-color: #f3e5f5;
+            --text-color: #4a0e4e;
+            --cell-color: #e1bee7;
+            --hover-color: #d1c4e9;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Fredoka One', cursive;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #3498db; /* New attractive background color */
+            background-color: var(--background-color);
         }
+
         .game-container {
-            background-color: #ecf0f1;
+            background-color: #fff;
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
         }
+
         h1 {
             text-align: center;
-            color: #2c3e50;
+            color: var(--primary-color);
             font-size: 2.5em;
             margin-bottom: 20px;
         }
+
         .board {
             display: grid;
             grid-template-columns: repeat(3, 100px);
             gap: 10px;
             margin-bottom: 30px;
         }
+
         .cell {
             width: 100px;
             height: 100px;
@@ -91,56 +106,68 @@ if (isset($_POST['reset'])) {
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #ffffff;
+            background-color: var(--cell-color);
             border: none;
-            border-radius: 10px;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: #2c3e50;
+            color: var(--text-color);
         }
+
         .cell:hover {
-            background-color: #bdc3c7;
+            background-color: var(--hover-color);
+            transform: scale(1.05);
         }
+
         .cell[disabled] {
             cursor: not-allowed;
             opacity: 0.7;
         }
+
         .status {
             text-align: center;
             margin-bottom: 20px;
             font-size: 1.4em;
-            font-weight: bold;
-            color: #2c3e50;
+            color: var(--text-color);
         }
+
         .reset-btn {
             display: block;
             width: 100%;
             padding: 15px;
             font-size: 1.2em;
-            background-color: #2ecc71;
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 15px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            font-family: 'Fredoka One', cursive;
         }
+
         .reset-btn:hover {
-            background-color: #27ae60;
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(142, 68, 173, 0.3);
+        }
+
+        .player-icon {
+            font-size: 2em;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <h1>Tic-Tac-Toe</h1>
+        <h1><i class="fas fa-gamepad"></i> Cute Tic-Tac-Toe</h1>
         
         <div class="status">
             <?php
             if ($winner) {
-                echo "Player $winner wins!";
+                echo "Player " . ($winner == 'X' ? '<i class="fas fa-cat player-icon"></i>' : '<i class="fas fa-dog player-icon"></i>') . " wins!";
             } elseif ($isDraw) {
-                echo "It's a draw!";
+                echo "It's a draw! <i class=\"fa fa-handshake\"></i>";
             } else {
-                echo "Current player: " . $_SESSION['current_player'];
+                echo "Current player: " . ($_SESSION['current_player'] == 'X' ? '<i class="fas fa-cat player-icon"></i>' : '<i class="fas fa-dog player-icon"></i>');
             }
             ?>
         </div>
@@ -148,13 +175,21 @@ if (isset($_POST['reset'])) {
         <form method="post" class="board">
             <?php for ($i = 0; $i < 9; $i++): ?>
                 <button type="submit" name="move" value="<?php echo $i; ?>" class="cell" <?php echo ($winner || $isDraw || $_SESSION['board'][$i] != '') ? 'disabled' : ''; ?>>
-                    <?php echo $_SESSION['board'][$i]; ?>
+                    <?php
+                    if ($_SESSION['board'][$i] == 'X') {
+                        echo '<i class="fas fa-cat"></i>';
+                    } elseif ($_SESSION['board'][$i] == 'O') {
+                        echo '<i class="fas fa-dog"></i>';
+                    }
+                    ?>
                 </button>
             <?php endfor; ?>
         </form>
 
         <form method="post">
-            <button type="submit" name="reset" class="reset-btn">Reset Game</button>
+            <button type="submit" name="reset" class="reset-btn">
+                <i class="fas fa-redo-alt"></i> Reset Game
+            </button>
         </form>
     </div>
 </body>
